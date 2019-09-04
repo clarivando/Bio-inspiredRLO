@@ -31,11 +31,12 @@ class ConnnectCRLO:
 		ideal_learn_obj.difficulty = ideal_lo.difficulty  # ['VeryEasy', 'Easy', 'Medium', 'Difficult', 'VeryDifficult']
 		ideal_learn_obj.quality = 1.0
 
-		st.name = stud.nome
-		st.id_student = stud.matricula
-		st.profile = {'input': stud.estiloInput, 'understanding': stud.estiloUnderstanding, 'perception': stud.estiloPercpetion, 'processing': stud.estiloProcessing}  # Input: Verbal|Visual; Understanding: Sequential|Global; Perception: Intuitive|Sensing; Processing: ActiveProcessing|Reflective
+		st.name = stud.name
+		st.id_student = stud.id_student
+		st.profile = {'input': stud.profile['input'], 'understanding': stud.profile['understanding'], 'perception': stud.profile['perception'], 'processing': stud.profile['processing']}  # Input: Verbal|Visual; Understanding: Sequential|Global; Perception: Intuitive|Sensing; Processing: ActiveProcessing|Reflective
 		ideal_learn_obj.student = st
-
+		stud.profile['input']
+		self.profile = {'input':'', 'understanding':'', 'perception':'', 'processing':''} #Input: Verbal|Visual; Understanding: Sequential|Global; Perception: Intuitive|Sensing; Processing: ActiveProcessing|Reflective 
 
 		#CRIAÇÃO DA LISTA DE OAs
 		#mech.search(ideal_learn_obj.concept)  # Preenche self.wiki_pages
