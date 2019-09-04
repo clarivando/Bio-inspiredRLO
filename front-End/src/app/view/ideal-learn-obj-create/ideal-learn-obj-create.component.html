@@ -1,0 +1,87 @@
+<h2>Informações Gerais do conteúdo</h2>
+
+<form [formGroup]="idealLOForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for= "title">Título</label>
+    <input type="text" formControlName="title" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.title.errors }"/>
+    <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+      <div *ngIf="f.title.errors.required">É necessário preencher título</div>
+    </div>
+  </div>
+  <label for= "concept">Conceito(s)</label>
+   <div formArrayName="concepts">
+      <div *ngFor="let concept of idealLOForm.get('concepts').controls; let i=index" >
+        <div [formGroupName]="i">
+      <input type="text" formControlName="concept" class="form-control"/>
+    </div>
+   </div>
+  </div>
+   <div class="form-group">
+    <a (click)="addConcept()" style="color: blue; cursor: pointer">
+      Adicionar outro conceito
+    </a>
+  </div>
+  <div class="form-group">
+    <label for="semantic_density">
+     Densidade Semântica
+    </label>
+  <div class="form-group">
+    <select class="form-control" formControlName="semantic_density">
+        <option value="" selected="">--------</option>
+            <option value="VeryLow">Muito Baixa</option>
+            <option value="Low">Baixa</option>      
+            <option value="Medium">Média</option>      
+            <option value="High">Alta</option>      
+            <option value="VeryHigh">Muito Alta</option>      
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="difficulty">
+   Dificuldade
+  </label>
+<div class="form-group">
+  <select class="form-control" formControlName="difficulty">
+      <option value="" selected="">--------</option>
+          <option value="VeryEasy">Muito fácil</option>
+          <option value="Easy">Fácil</option>      
+          <option value="Medium">Média</option>      
+          <option value="Difficult">dificil</option>      
+          <option value="VeryDifficult">Muito dificil</option>      
+  </select>
+</div>
+</div>
+<div class="form-group">
+  <label for="interactivity_type">
+   Tipo de Interatividade
+  </label>
+<div class="form-group">
+  <select class="form-control" formControlName="interactivity_type">
+      <option value="" selected="">--------</option>
+          <option value="Active">Ativo</option>
+          <option value="Expositive">Expositivo</option>      
+          <option value="Mixed">Misto</option>   
+  </select>
+</div>
+</div>
+<div class="form-group">
+  <label for="interactivity_level">
+   Tipo de Interatividade
+  </label>
+<div class="form-group">
+  <select class="form-control" formControlName="interactivity_level">
+        <option value="" selected="">--------</option>
+        <option value="VeryLow">Muito Baixa</option>
+        <option value="Low">Baixa</option>      
+        <option value="Medium">Média</option>      
+        <option value="High">Alta</option>      
+        <option value="VeryHigh">Muito Alta</option>    
+  </select>
+</div>
+</div>
+<div class="form-group">
+  <button [disabled]="loading" class="btn btn-primary">Registrar</button>
+</div>
+</form>
+
+{{ this.idealLOForm.value | json }}

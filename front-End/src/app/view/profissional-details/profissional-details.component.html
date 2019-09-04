@@ -1,0 +1,12 @@
+<div *ngIf="profissional">
+  <div>
+    <label>Nome: </label> {{profissional.Name}}
+  </div>
+  <div>
+    <label>CPF: </label> {{profissional.cpf}}
+  </div>
+
+  <span class="button is-small btn-danger" (click)='deleteProfissional()'>Delete</span>
+
+  <hr/>
+</div>

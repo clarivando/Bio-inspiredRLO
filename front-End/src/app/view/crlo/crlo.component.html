@@ -1,0 +1,60 @@
+<h2>Recomendação de conteúdo</h2>
+<form [formGroup]="crloForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="idealLO">
+         Conteúdo a ser recomendado
+      </label>
+      <div class="form-group">
+        <select class="form-control" formControlName="idealLO" >
+<<<<<<< HEAD
+          <option *ngFor="let idealLearnObj of idealLearnObjs" value="{{idealLearnObj.instance_name}}">{{idealLearnObj.title}}</option>    
+          <!-- <option *ngFor="let idealLearnObj of idealLearnObjs">{{idealLearnObj.title}}</option> -->
+=======
+          <option *ngFor="let idealLearnObj of idealLearnObjs | async" value="{{idealLearnObj.id}}">{{idealLearnObj.title}}</option>     
+>>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+        <label for="aluno">
+        Aluno
+        </label>
+      <div class="form-group">
+        <select class="form-control" formControlName="aluno" >
+<<<<<<< HEAD
+          <!--<option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.nome}}</option>-->     
+          <option *ngFor="let aluno of alunos">{{aluno.name}}</option>      
+=======
+          <option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.nome}}</option>     
+>>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <button [disabled]="loading" class="btn btn-primary">Buscar</button>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1>Objetos de Aprendizagem</h1>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Titulo</th>
+              <th>Conceito</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let learnObj of learnObjs">
+              <td>{{learnObj.title}}</td>
+              <td>{{learnObj.concept}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</form>
+
+{{ this.crloForm.value | json }}
+{{this.crloForm.teste}}

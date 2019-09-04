@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1>Profissionais</h1>
+  </div>
+  <div class="panel-body">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>learningStyle</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let profissional of profissionais | async">
+          <td>{{profissional.nome}}</td>
+          <td>{{profissional.learningStyle}}</td>
+          <td><button class="btn btn-primary active" (click)="deleteProfissional(profissional.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
