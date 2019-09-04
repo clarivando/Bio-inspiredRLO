@@ -20,11 +20,7 @@ class Ontology_connection:
 			raise Exception("This class is a singleton!")
 		else:
 			#onto_path.append("C:\\Users\\Cleon Xavier7\\Google Drive\\UFU\\TutorialPython\\recSystem\\CRLO\\dao\\ontologia")
-<<<<<<< HEAD
 			onto_path.append("C:\\Users\\Clarivando\\Documents\\Junior\\FACULDADE\\Doutorado\\Doutorado - Pesquisa\\Publicações\\LNCS\\Programa\\ontologia_14_08_18")
-=======
-			onto_path.append("C:\\Users\\Clarivando\\Documents\\Junior\\FACULDADE\\Doutorado\\Doutorado - Pesquisa\\Publicações\\LNCS\\Programa\\v2\\main\\CRLO\\dao\\ontologia")
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 
 			self.learningObjects = get_ontology("http://www.semanticweb.org/clarivando/ontologies/2017/5/learningObjects.owl")
 

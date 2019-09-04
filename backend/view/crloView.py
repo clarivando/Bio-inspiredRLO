@@ -41,25 +41,9 @@ def obj_dict(obj):
 def crlo_list(request):
     if request.method == 'POST':
         crlo_data = JSONParser().parse(request)
-<<<<<<< HEAD
 
         connectCRLO = ConnnectCRLO()
         learn_obj_list = connectCRLO.recSystemCRLO(crlo_data["aluno"], crlo_data["idealLO"])
-=======
-        pk_idealLO=crlo_data["idealLO"]
-        pk_aluno=crlo_data["aluno"]
-
-        try:
-            idealLO = IdealLO.objects.get(pk=pk_idealLO)
-        except IdealLO.DoesNotExist:
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-        try:
-            aluno = Aluno.objects.get(pk=pk_aluno)
-        except Aluno.DoesNotExist:
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-        connectCRLO = ConnnectCRLO()
-        learn_obj_list = connectCRLO.recSystemCRLO(aluno, idealLO)
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 
         json_string = json.dumps(learn_obj_list, default=obj_dict)
 

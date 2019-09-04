@@ -3,7 +3,6 @@ from rest_framework import generics
 from backend.model.aluno import Aluno
 from backend.model.crlo import Crlo
 from backend.model.idealLO import IdealLO
-<<<<<<< HEAD
 #from backend.serializers import AlunoSerializer, IdealLOSerializer
 
 from django.views.decorators.csrf import csrf_exempt
@@ -29,11 +28,6 @@ import json
 
 
 """
-=======
-from backend.serializers import AlunoSerializer, IdealLOSerializer
-
-
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 class AlunoAPIView(generics.ListCreateAPIView):
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
@@ -45,7 +39,6 @@ class IdealLOAPIView(generics.ListCreateAPIView):
 
 class CrloAPIView(generics.ListCreateAPIView):
     queryset = Crlo.objects.all()
-<<<<<<< HEAD
     serializer_class = IdealLOSerializer
 """
 
@@ -115,6 +108,3 @@ def ideallo_list(request):
         #grava aluno na ontologia
         json_string = json.dumps([], default=obj_dict)
         return JsonResponse(json_string, safe=False)
-=======
-    serializer_class = IdealLOSerializer
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe

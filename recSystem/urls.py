@@ -21,15 +21,9 @@ from backend.view import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
     path(r'alunos', views.aluno_list, name='aluno-list'),
     path(r'ideallos', views.ideallo_list, name='ideallo-list'),
  #   path(r'crlos', views.CrloAPIView.as_view(), name='crlo-list'),
-=======
-    path(r'alunos', views.AlunoAPIView.as_view(), name='aluno-list'),
-    path(r'ideallos', views.IdealLOAPIView.as_view(), name='ideallo-list'),
-    path(r'crlos', views.CrloAPIView.as_view(), name='crlo-list'),
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
  #   path(r'recommend/<int:pk>/', crloView.crlo_detail1, name='crlo-aluno'),
  #   path(r'recommend1/<int:pk>/', crloView.crlo_detail2, name='crlo-obj'),
     path(r'recommend2', crloView.crlo_list, name='crlo-list'),

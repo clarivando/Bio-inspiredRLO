@@ -61,11 +61,6 @@ export class IdealLearnObjCreateComponent implements OnInit {
     this.idealLearnObj.difficulty=this.idealLOForm.get('difficulty').value;
     this.idealLearnObj.interactivity_type=this.idealLOForm.get('interactivity_type').value;
     this.idealLearnObj.interactivity_level=this.idealLOForm.get('interactivity_level').value;
-<<<<<<< HEAD
-=======
-
-
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
   }
 
   onSubmit() {

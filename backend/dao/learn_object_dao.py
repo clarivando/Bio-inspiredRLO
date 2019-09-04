@@ -269,10 +269,6 @@ class Learning_object_dao():
 						lo.semantic_density = instance.hasEducationalData[0].hasSemanticDensity.__class__.__name__
 					if instance.hasEducationalData[0].hasDifficulty:
 						lo.difficulty = instance.hasEducationalData[0].hasDifficulty.__class__.__name__
-<<<<<<< HEAD
-=======
-			
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		return lo
 			
 	def read_ideal_learn_object(self, instance_name = "LO_ideal_0000001"):

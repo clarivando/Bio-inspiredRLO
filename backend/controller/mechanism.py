@@ -18,11 +18,7 @@ class Main_c():
 		self.learn_obj_list = []
 		
 	#Principal algoritmo de recomendaçao de OAs
-<<<<<<< HEAD
 	def learn_obj_recommendation(self, ideal_learn_obj):
-=======
-	def learn_obj_recommendation(self, ideal_learn_obj, temp_learn_obj_list, original_learn_obj_list):
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		
 		
 		#Selecione um OA ideal da ontologia (LINHA 1 - ARP)
@@ -46,7 +42,6 @@ class Main_c():
 		self.update_ideal_learn_object(ideal_learn_obj)
 		"""
 		
-<<<<<<< HEAD
 		#Execute o processo de inferência
 
 		#Crie uma lista de OAs com os OAs sugeridos pela inferência (LINHA 6 - ARP)
@@ -54,12 +49,6 @@ class Main_c():
 		list_learn_obj = self.read_all_suggested_learn_obj()
 		self.print_solution(list_learn_obj)
 		"""
-=======
-		#Crie uma lista de OAs com os OAs sugeridos pela inferência (LINHA 6 - ARP)
-		
-		#list_learn_obj = self.read_all_suggested_learn_obj()
-		#self.print_solution(list_learn_obj)
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		
 		#Se há nenhum conceito no OA ideal, então finalize executando o procedimento que compara os parâmetros do OA ideal com os parâmetros dos OAs de list_learn_obj para retornar os OAs mais similares ao OA ideal (LINHA 7 - ARP)
 		"""
@@ -87,16 +76,6 @@ class Main_c():
 		
 		#Execute o procedimento que gera uma matriz "m" e o "vetor de custos", sendo "m" uma instância do PROA (LINHA 14)
 		
-<<<<<<< HEAD
-=======
-		
-		deleted_concepts = []
-		index_partial_solution = [] #contém os OAs que cobrem algum conceito (do OA ideal) de maneira única
-		m, costs, map = self.create_instance_scp(ideal_learn_obj, temp_learn_obj_list, deleted_concepts, index_partial_solution)
-	
-		
-		
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		"""
 		print('deleted_concepts: ', deleted_concepts)
 		print('index_partial_solution: ', index_partial_solution)
@@ -106,12 +85,8 @@ class Main_c():
 		"""
 
 		#Execute o AG integer que resolve o PROA (LINHA 15 - ARP)
-<<<<<<< HEAD
 
 		#cria matriz aleatoria e vetor de custos aleatorio
-=======
-		#criar matriz aleatoria e vetor de custos aleatorio
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		"""
 		nr_lines = 50   #25
 		nr_columns = 100    #400
@@ -121,7 +96,6 @@ class Main_c():
 		#print(m)
 		"""
 		
-<<<<<<< HEAD
 		temp_learn_obj_list = self.create_learn_object(ideal_learn_obj) #Preenche self.learn_obj_list
 		if temp_learn_obj_list == -1:
 			#Padroniza conceitos (minúsculo)
@@ -149,10 +123,6 @@ class Main_c():
 			#Não há OAs na ontologia e os recursos wiki encontrados não cobrem os conceitos a serem aprendidos!
 			return []
 
-=======
-		num_test = 1
-		pop_size = 100
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		nr_lines = len(m)
 		nr_columns = len(m[0])
 		ga = ga_integer.Genetic(m, costs, nr_lines, nr_columns, pop_size)
@@ -163,22 +133,11 @@ class Main_c():
 		#best_chromo, best_fitness = ga.run_random_algorithm()
 		#print(best_chromo, best_fitness)
 		learn_obj_list = self.print_solution_ga_integer(ranked_pop, index_partial_solution, original_learn_obj_list, map)
-<<<<<<< HEAD
 		return learn_obj_list
 
 		
 		#Persista na ontologia os OAs temporários recomendados, se houver (LINHA 16 - ARP)
 		
-=======
-		return learn_obj_list;
-
-		#Monta solução final
-		#Junta partial_solution com os OA recomendados pelo algoritmo AG
-		
-		#Persista na ontologia os OAs temporários recomendados, se houver (LINHA 16 - ARP)
-		
-		
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		#*******SALVAR A ONTOLOGIA**********
 		#self.save_main_ontology(self)
 	
@@ -232,11 +191,7 @@ class Main_c():
 			print("index_solution: ", index_solution)
 			print("fitness: ", ranked_pop[i][1])
 			self.print_solution(learn_obj_solution)
-<<<<<<< HEAD
 			return learn_obj_solution
-=======
-			return learn_obj_solution;
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 			
 	def print_solution(self, list_learn_obj):
 	
@@ -451,40 +406,22 @@ class Main_c():
 		file_name = 'learn_obj_list.pickle'
 		self.learn_obj_list = metadata_m.load_learn_obj_list(file_name)
 
-<<<<<<< HEAD
 		if self.learn_obj_list == -1 and self.wiki_pages:
-=======
-		if self.learn_obj_list == -1:
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 			#Comente a linha abaixo para gerar OAs totalmente aleatorios
 			self.learn_obj_list = metadata_m.wiki_pages_2_OAs(self.wiki_pages) #Essa linha gera os OAs derivados das seções wiki
 			#Nas linhas abaixo são gerados OAs complementares - Serão gerados 790 OAs com 1 conceito coberto por cada um; mais 10 OAs com 2 conceitos cobertos por cada um; Os conceitos cobertos por cada OA são escolhidos aleatoriamente da lista "concepts"
 			
-<<<<<<< HEAD
 			#concepts = ['Reprodução', 'Mitose', 'Meiose', 'Célula', 'Tecido adiposo', 'Tecido conjuntivo', 'Epitélio', 'Protista', 'Animalia', 'Plantae']
 			#nr_concepts_list = [1,2]
 			#nr_los_list = [80,7]
 			#self.complement_los(concepts, nr_concepts_list, nr_los_list)
-=======
-			concepts = ['Reprodução', 'Mitose', 'Meiose', 'Célula', 'Tecido adiposo', 'Tecido conjuntivo', 'Epitélio', 'Protista', 'Animalia', 'Plantae']
-			nr_concepts_list = [1,2]
-			nr_los_list = [80,7]
-			self.complement_los(concepts, nr_concepts_list, nr_los_list)
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 			self.generate_parameter(ideal_learn_obj)
 			
 			metadata_m.save_learn_obj_list(self.learn_obj_list, file_name)
 			
-<<<<<<< HEAD
 		if self.learn_obj_list != -1:
 			for i in range(len(self.learn_obj_list)):
 				print(i+1,' :', self.learn_obj_list[i].unique_identifier, self.learn_obj_list[i].concept, self.learn_obj_list[i].semantic_density)
-=======
-		
-		for i in range(len(self.learn_obj_list)):
-			print(i+1,' :', self.learn_obj_list[i].unique_identifier, self.learn_obj_list[i].concept, self.learn_obj_list[i].semantic_density)
-		
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 		
 		return self.learn_obj_list
 				

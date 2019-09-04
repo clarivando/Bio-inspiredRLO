@@ -25,11 +25,8 @@ export class CrloComponent implements OnInit {
   alunos: Observable<Aluno[]>;
   learnObjs:Observable<LearnObj[]>;
   teste='';
-<<<<<<< HEAD
   index_aluno=0;
   index_oa_ideal=0;
-=======
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -41,7 +38,6 @@ export class CrloComponent implements OnInit {
     idealLO:'',
     aluno:'',
     learnObj:''
-<<<<<<< HEAD
   })
 
   this.idealLearnObjService.getIdealLearnObj().subscribe(
@@ -67,20 +63,6 @@ export class CrloComponent implements OnInit {
       this.crlo.aluno =this.crloForm.get('aluno').value;
       this.crlo.idealLO = this.crloForm.get('idealLO').value;
      
-=======
-
-  })
-    this.idealLearnObjs=this.idealLearnObjService.getIdealLearnObj();
-    this.alunos=this.alunoService.getAlunosList();
-
-    
-  }
-
-  onSubmit() {
-      this.crlo.aluno=this.crloForm.get('aluno').value;
-      this.teste='12345';
-      this.crlo.idealLO=this.crloForm.get('idealLO').value;
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
       this.crloService.retrieve(this.crlo)
       .subscribe(
           data => {
@@ -88,16 +70,9 @@ export class CrloComponent implements OnInit {
             console.log(this.learnObjs);
           },
           error => {
-<<<<<<< HEAD
             this.loading = false;
           });
   }
-=======
-              this.loading = false;
-          });
-  }
-
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
 }    
   
 
