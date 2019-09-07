@@ -97,6 +97,7 @@ class Main_c():
 		"""
 		
 		temp_learn_obj_list = self.create_learn_object(ideal_learn_obj) #Preenche self.learn_obj_list
+		print("*****  temp_learn_obj_list  ****: ", temp_learn_obj_list)
 		if temp_learn_obj_list == -1:
 			#Padroniza conceitos (minúsculo)
 			list_concept = ideal_learn_obj.concept.split(';')
@@ -208,7 +209,8 @@ class Main_c():
 	def create_instance_scp(self, ideal_learn_obj, list_learn_obj, deleted_concepts, index_partial_solution):
 	
 		#Padroniza conceitos (minúsculo)
-		list_concept = ideal_learn_obj.concept.split(';')
+		print()
+		list_concept = ideal_learn_obj.concept
 		ideal_learn_obj.concept = list_concept[:-1]
 		for i in range(len(ideal_learn_obj.concept)):
 			ideal_learn_obj.concept[i] = ideal_learn_obj.concept[i].lower()

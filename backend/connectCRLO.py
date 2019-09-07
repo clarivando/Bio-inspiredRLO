@@ -41,7 +41,6 @@ class ConnnectCRLO:
 		#CRIAÇÃO DA LISTA DE OAs
 		#mech.search(ideal_learn_obj.concept)  # Preenche self.wiki_pages
 		
-		
 		#temp_learn_obj_list = mech.create_learn_object(ideal_learn_obj, search_wiki=False) #Preenche self.learn_obj_list
 		#original_learn_obj_list = mech.create_learn_object(ideal_learn_obj, search_wiki=False)
 		learn_obj_list = mech.learn_obj_recommendation(ideal_learn_obj)
