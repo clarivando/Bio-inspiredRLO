@@ -23,7 +23,7 @@ export class CrloComponent implements OnInit {
   crloForm: FormGroup;
   idealLearnObjs: Observable<IdealLearnObj[]>;
   alunos: Observable<Aluno[]>;
-  learnObjs:Observable<LearnObj[]>;
+  learnObjs: Observable<LearnObj[]>;
   teste='';
   index_aluno=0;
   index_oa_ideal=0;
