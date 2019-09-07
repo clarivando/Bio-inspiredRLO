@@ -6,26 +6,21 @@
       </label>
       <div class="form-group">
         <select class="form-control" formControlName="idealLO" >
-<<<<<<< HEAD
           <option *ngFor="let idealLearnObj of idealLearnObjs" value="{{idealLearnObj.instance_name}}">{{idealLearnObj.title}}</option>    
           <!-- <option *ngFor="let idealLearnObj of idealLearnObjs">{{idealLearnObj.title}}</option> -->
-=======
-          <option *ngFor="let idealLearnObj of idealLearnObjs | async" value="{{idealLearnObj.id}}">{{idealLearnObj.title}}</option>     
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
+          <!-- <option *ngFor="let idealLearnObj of idealLearnObjs | async" value="{{idealLearnObj.id}}">{{idealLearnObj.title}}</option>-->
         </select>
       </div>
     </div>
     <div class="form-group">
-        <label for="aluno">
+      <label for="student">
         Aluno
-        </label>
+      </label>
+      <div class="form-group">
         <select class="form-control" formControlName="student" >
           <option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.name}}</option>
           <!--<option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.nome}}</option>-->     
-          <option *ngFor="let aluno of alunos">{{aluno.name}}</option>      
-=======
-          <option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.nome}}</option>     
->>>>>>> ec706c17745f0e0f313f62ff4cd5b15711e278fe
+          <!-- <option *ngFor="let aluno of alunos">{{aluno.name}}</option> -->
         </select>
       </div>
     </div>
