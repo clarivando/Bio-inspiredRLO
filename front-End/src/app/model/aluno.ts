@@ -1,7 +1,7 @@
 export class Aluno {
-    id: number;
-    nome: string;
-    matricula: string;
+    instance_name: string;
+    name: string;
+    id_student: string;
     estiloInput: string;
     estiloUnderstanding: string;
     estiloPercpetion: string;

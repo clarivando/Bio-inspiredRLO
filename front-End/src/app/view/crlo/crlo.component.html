@@ -18,7 +18,7 @@
       </label>
       <div class="form-group">
         <select class="form-control" formControlName="aluno" >
-          <option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.name}}</option>
+          <option *ngFor="let aluno of alunos | async" value="{{aluno.instance_name}}">{{aluno.name}}</option>
           <!--<option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.nome}}</option>-->     
           <!-- <option *ngFor="let aluno of alunos">{{aluno.name}}</option> -->
         </select>
