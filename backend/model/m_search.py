@@ -36,7 +36,7 @@ class Search_m:
 # print(res)
 """
 
-
+import wikipedia
 import wikipediaapi
 
 class Search_m:
@@ -44,10 +44,11 @@ class Search_m:
 	def __init__(self):
 		pass
 
-	def search(self, search_line = "Algoritmo genético"):
-		
-		wiki = wikipediaapi.Wikipedia('pt')
-		page = wiki.page(search_line)
+	def search(self, search_line):
+
+		wikipedia.set_lang("pt")
+		search_wiki=wikipedia.search(search_line)
+		page = wikipedia.page(search_wiki[0])
 		if not page.summary and not page.sections:
 			page = ""
 		return page

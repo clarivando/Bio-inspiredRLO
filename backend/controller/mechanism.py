@@ -75,7 +75,7 @@ class Main_c():
 		if not all_covered_concepts:
 			#Execute o método de criação de OAs com conteúdo de seções wiki
 			
-			self.search(list_concept)
+			self.search(list_concept, ideal_learn_obj.title)
 			if not self.wiki_pages and not list_learn_obj:
 				##Não há OAs na ontologia nem recursos wiki para serem recomendados!
 				status = 'No LO in Wikipedia and no LO in Ontology'
@@ -306,12 +306,14 @@ class Main_c():
 		
 		return rec_learn_obj_list	
 		
-	def search(self, concepts_list):
+	def search(self, concepts_list, title):
 		
 		#self.search_c.line_search_lineEdit.clear()
 		search_m = m_search.Search_m()
+		search_word=""
 		for i in range(len(concepts_list)):
-			page = search_m.search(concepts_list[i])
+			search_word = concepts_list[i] + " " + title
+			page = search_m.search(search_word)
 			if page:
 				self.wiki_pages.append(page)
 			
