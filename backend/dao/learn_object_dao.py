@@ -314,7 +314,54 @@ class Learning_object_dao():
 						
 		return lo_ideal
 		
+	#Esse método tem uma execução mais rápida pois o processo de inferência não é executado
+	#e, portanto, o campo lo_ideal.learn_resource_type não é preenchido
 	def read_all_ideal_learn_object(self):
+		
+		st_dao = Student_dao()
+		lo_ideal_list = []
+		
+		for instance in self.onto_learning_objects.IdealLOs.instances():
+
+			lo_ideal = Learning_object_ideal()
+			lo_ideal.instance_name = instance.name
+			if instance.hasGeneralData:
+				if instance.hasGeneralData[0].hasTitle:
+					lo_ideal.title = instance.hasGeneralData[0].hasTitle[0]
+				if instance.hasGeneralData[0].hasDescription:
+					lo_ideal.description = instance.hasGeneralData[0].hasDescription[0]
+				if instance.hasGeneralData[0].hasKeyword:
+					lo_ideal.concept = instance.hasGeneralData[0].hasKeyword[0].split("\n")
+	
+			if instance.hasEducationalData:
+				if instance.hasEducationalData[0].hasInteractivityType:
+					lo_ideal.interactivity_type = instance.hasEducationalData[0].hasInteractivityType.__class__.__name__
+				if instance.hasEducationalData[0].hasInteractivityLevel:
+					lo_ideal.interactivity_level = instance.hasEducationalData[0].hasInteractivityLevel.__class__.__name__
+				if instance.hasEducationalData[0].hasSemanticDensity:
+					lo_ideal.semantic_density = instance.hasEducationalData[0].hasSemanticDensity.__class__.__name__
+				if instance.hasEducationalData[0].hasDifficulty:
+					lo_ideal.difficulty = instance.hasEducationalData[0].hasDifficulty.__class__.__name__
+					
+			if instance.isRecommendedFor:
+				st = st_dao.read_one(instance.isRecommendedFor[0].name)
+				lo_ideal.student = st
+			
+			#print("lo_ideal.difficulty: ", lo_ideal.difficulty)
+			#print("lo_ideal.semantic_density: ", lo_ideal.semantic_density)
+			#print("lo_ideal.interactivity_level: ", lo_ideal.interactivity_level)
+			#print("lo_ideal.learn_resource_type: ", lo_ideal.learn_resource_type)
+			#print("lo_ideal.concept: ", lo_ideal.concept)
+			
+			lo_ideal_list.append(lo_ideal)
+			
+		return lo_ideal_list
+
+
+	#Esse método pode ter uma execução demorada, dado que o processo de inferência
+	#é realizado para cada OA ideal com o objetivo de preencher o campo
+	#lo_ideal.learn_resource_type com base no perfil do estudante
+	def read_all_ideal_learn_object_with_inference(self):
 		
 		st_dao = Student_dao()
 		lo_ideal_list = []
@@ -365,6 +412,7 @@ class Learning_object_dao():
 			lo_ideal_list.append(lo_ideal)
 			
 		return lo_ideal_list
+
 		
 	def read_all(self):
 		
@@ -525,6 +573,19 @@ class Learning_object_dao():
 				st_instance = self.onto_learning_objects.Student(learn_obj_ideal.student.instance_name)
 				instance.isRecommendedFor = [st_instance] #O OA ideal é recomendado a apenas um Student
 				break
+
+
+	#Nota: esse método não persiste os dados
+	#para isso use: self.onto_learning_objects.save(). Isso deveria ser feito somente após todas as inferências. Os mundos alternativos (parece que) não aceitam inferências depois que a ontologia principal é salva
+	def links_student_to_ideal_learn_obj(self, ideal_lo_name, student_name):	
+	
+		for instance in self.onto_learning_objects.IdealLOs.instances():
+			if instance.name == ideal_lo_name:
+				#Ler instancia de Student
+				st_instance = self.onto_learning_objects.Student(student_name)
+				instance.isRecommendedFor = [st_instance] #O OA ideal é recomendado a apenas um Student
+				break
+
 				
 	def delete_all_temp_learn_obj(self):
 	

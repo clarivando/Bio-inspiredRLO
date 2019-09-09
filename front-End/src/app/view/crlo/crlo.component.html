@@ -6,7 +6,7 @@
       </label>
       <div class="form-group">
         <select class="form-control" formControlName="idealLO" >
-          <option *ngFor="let idealLearnObj of idealLearnObjs | async" value="{{idealLearnObj.instance_name}}">{{idealLearnObj.title}}</option>    
+          <option *ngFor="let idealLearnObj of idealLearnObjs" value="{{idealLearnObj.instance_name}}">{{idealLearnObj.title}}</option>    
           <!-- <option *ngFor="let idealLearnObj of idealLearnObjs">{{idealLearnObj.title}}</option> -->
           <!-- <option *ngFor="let idealLearnObj of idealLearnObjs | async" value="{{idealLearnObj.id}}">{{idealLearnObj.title}}</option>-->
         </select>
@@ -18,7 +18,7 @@
       </label>
       <div class="form-group">
         <select class="form-control" formControlName="aluno" >
-          <option *ngFor="let aluno of alunos | async" value="{{aluno.instance_name}}">{{aluno.name}}</option>
+          <option *ngFor="let aluno of alunos" value="{{aluno.instance_name}}">{{aluno.name}}</option>
           <!--<option *ngFor="let aluno of alunos | async" value="{{aluno.id}}">{{aluno.nome}}</option>-->     
           <!-- <option *ngFor="let aluno of alunos">{{aluno.name}}</option> -->
         </select>

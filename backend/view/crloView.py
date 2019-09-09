@@ -43,7 +43,7 @@ def crlo_list(request):
         crlo_data = JSONParser().parse(request)
 
         connectCRLO = ConnnectCRLO()
-        learn_obj_list = connectCRLO.recSystemCRLO(crlo_data["aluno"], crlo_data["idealLO"])
+        status, learn_obj_list = connectCRLO.recSystemCRLO(crlo_data["aluno"], crlo_data["idealLO"])
 
         json_string = json.dumps(learn_obj_list, default=obj_dict)
 

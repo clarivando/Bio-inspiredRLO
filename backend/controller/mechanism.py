@@ -1,12 +1,13 @@
-from backend.model import learn_obj_greedy, m_search, creation_learn_obj, learn_obj, ga_integer
+from backend.model import learn_obj_greedy, m_search, creation_learn_obj, learn_obj, student, ga_integer
 from backend.dao import learn_object_dao, student_dao
+from backend.dao.student_dao import Student_dao
+from backend.dao.learn_object_dao import Learning_object_dao
 import random
 from owlready2 import *
 from operator import itemgetter
+from copy import deepcopy
 
 import xlsxwriter
-
-from backend.model import student
 
 import timeit
 
@@ -18,102 +19,88 @@ class Main_c():
 		self.learn_obj_list = []
 		
 	#Principal algoritmo de recomendaçao de OAs
-	def learn_obj_recommendation(self, ideal_learn_obj):
+	def learn_obj_recommendation(self, obj_apr):
 		
-		
-		#Selecione um OA ideal da ontologia (LINHA 1 - ARP)
-		#OAs ideais sao criados e editados no Protégé
-		#Apresenta lista de OAs ideias da ontologia
-		"""
-		ideal_learn_obj_list = self.read_all_ideal_learn_obj()
-		index_ideal = self.print_list_ideal_objects(ideal_learn_obj_list)
-		ideal_learn_obj = ideal_learn_obj_list[index_ideal]
-		#Somente o OA ideal selecionado possui status ativo na ontologia
-		self.set_ideal_learn_object_active(ideal_learn_obj.instance_name)
-		"""
-	
-		#Selecione um estudante (aluno) da ontologia (LINHA 3 - ARP)
-		#Apresenta lista de alunos
-		"""
-		students_list = self.read_students()
-		index_student = self.print_list_students(students_list)
-		ideal_learn_obj.student = students_list[index_student]
-		#O OA ideal é recomendado para um único aluno
-		self.update_ideal_learn_object(ideal_learn_obj)
-		"""
-		
-		#Execute o processo de inferência
+		self.set_ideal_learn_object_active(instance_name = obj_apr)
 
 		#Crie uma lista de OAs com os OAs sugeridos pela inferência (LINHA 6 - ARP)
-		"""
 		list_learn_obj = self.read_all_suggested_learn_obj()
 		self.print_solution(list_learn_obj)
-		"""
 		
+		#Le o OA Ideal (obj_apr) da ontologia
+		lo_dao = Learning_object_dao()
+		ideal_learn_obj = lo_dao.read_ideal_learn_object(instance_name = obj_apr)
+
 		#Se há nenhum conceito no OA ideal, então finalize executando o procedimento que compara os parâmetros do OA ideal com os parâmetros dos OAs de list_learn_obj para retornar os OAs mais similares ao OA ideal (LINHA 7 - ARP)
-		"""
 		if not ideal_learn_obj.concept:
+			status = 'No concept in Ideal LO'
+			return status, []
+
+			"""
 			lo_list, scores = self.similar_parameters_filter(ideal_learn_obj, original_learn_obj_list)
-			
 			if not lo_list:
 				print("lo_list vazia!")
-				
 			else:
 				print("Scores top 10: ", scores)
 				#print("OAs top 10:\n")
 				#self.print_solution(lo_list)
-			
 			return 1
-		"""
+			"""
 		
 		#Se há ao menos um conceito
+		#Normaliza lista de conceitos do OA ideal
+		list_concept = ideal_learn_obj.concept
+		for i in range(len(list_concept)):
+			list_concept[i] = list_concept[i].lower()
+		
+		#Normaliza lista de conceitos dos OAs sugeridos
+		for i in range(len(list_learn_obj)):
+			for j in range(len(list_learn_obj[i].concept)):
+				list_learn_obj[i].concept[j] = list_learn_obj[i].concept[j].lower()
+
+		all_covered_concepts = True
+		for i in range(len(list_concept)):
+			covered_concept = False
+			for j in range(len(list_learn_obj)):
+				if list_concept[i] in list_learn_obj[j].concept:
+					covered_concept = True
+					break
+			if not covered_concept:
+				all_covered_concepts = False
+				break
+
+
 		#Se há conceitos que não podem ser cobertos por nenhum dos OAs sugeridos (LINHAS 9 A 13 - ARP)
+		wiki_learn_obj_list = []
+		if not all_covered_concepts:
 			#Execute o método de criação de OAs com conteúdo de seções wiki
-			#Torne os OAs criados instâncias da classe TemporaryLOs
-			#Execute o processo de inferência
-			#Atribua à variável list_learn_obj, os OAs resultantes da adição das instâncias de SuggestedLOs com as instâncias de TemporaryLOs
-			#Eliminar da list_learn_obj os OAs redundantes do tipo TemporaryLOs (mantendo os do tipo permanente)
-		
-		#Execute o procedimento que gera uma matriz "m" e o "vetor de custos", sendo "m" uma instância do PROA (LINHA 14)
-		
-		"""
-		print('deleted_concepts: ', deleted_concepts)
-		print('index_partial_solution: ', index_partial_solution)
-		print('costs: ', costs)
-		print('nr_lines matriz: ', len(m))
-		print('nr_columns matriz: ', len(m[0]))
-		"""
-
-		#Execute o AG integer que resolve o PROA (LINHA 15 - ARP)
-
-		#cria matriz aleatoria e vetor de custos aleatorio
-		"""
-		nr_lines = 50   #25
-		nr_columns = 100    #400
-		m, costs = self.create_random_instance_scp(nr_lines, nr_columns)
-		#print("Custo: ", costs)
-		#print("Matriz: ")
-		#print(m)
-		"""
-		
-		temp_learn_obj_list = self.create_learn_object(ideal_learn_obj) #Preenche self.learn_obj_list
-		print("*****  temp_learn_obj_list  ****: ", temp_learn_obj_list)
-		if temp_learn_obj_list == -1:
-			#Padroniza conceitos (minúsculo)
-			list_concept = ideal_learn_obj.concept.split(';')
-			list_concept = list_concept[:-1]
-			for i in range(len(list_concept)):
-				list_concept[i] = list_concept[i].lower()
 			
 			self.search(list_concept)
-			if not self.wiki_pages:
+			if not self.wiki_pages and not list_learn_obj:
 				##Não há OAs na ontologia nem recursos wiki para serem recomendados!
-				return []
-			
-			temp_learn_obj_list = self.create_learn_object(ideal_learn_obj)
+				status = 'No LO in Wikipedia and no LO in Ontology'
+				return status, []
 
-		original_learn_obj_list = self.create_learn_object(ideal_learn_obj)
+			wiki_learn_obj_list = self.create_learn_object(ideal_learn_obj)
+			if wiki_learn_obj_list:
+				#Normaliza lista de conceitos dos OAs da Wikipedia
+				for i in range(len(wiki_learn_obj_list)):
+					for j in range(len(wiki_learn_obj_list[i].concept)):
+						wiki_learn_obj_list[i].concept[j] = wiki_learn_obj_list[i].concept[j].lower()
+				#Torne os OAs criados instâncias da classe TemporaryLOs
+				#Execute o processo de inferência
+				#Atribua à variável list_learn_obj, os OAs resultantes da adição das instâncias de SuggestedLOs com as instâncias de TemporaryLOs
+				#Eliminar da list_learn_obj os OAs redundantes do tipo TemporaryLOs (mantendo os do tipo permanente)
 		
+		temp_learn_obj_list = list_learn_obj + wiki_learn_obj_list
+		#Tirar copia de temp_learn_obj_list e armazenar em original_learn_obj_list
+		original_learn_obj_list = deepcopy(temp_learn_obj_list)
+
+		for i in range(len(temp_learn_obj_list)):
+			print(i)
+			print(temp_learn_obj_list[i].concept)
+		
+		#Execução o AG integer que resolve o PROA (LINHA 15 - ARP)
 		num_test = 1
 		pop_size = 100
 		deleted_concepts = []
@@ -121,8 +108,9 @@ class Main_c():
 		m, costs, map = self.create_instance_scp(ideal_learn_obj, temp_learn_obj_list, deleted_concepts, index_partial_solution)
 
 		if not m:
-			#Não há OAs na ontologia e os recursos wiki encontrados não cobrem os conceitos a serem aprendidos!
-			return []
+			#Os OAs não cobrem nenhum dos conceitos a serem aprendidos!
+			status = 'LOs do not cover any concept'
+			return status, []
 
 		nr_lines = len(m)
 		nr_columns = len(m[0])
@@ -134,13 +122,14 @@ class Main_c():
 		#best_chromo, best_fitness = ga.run_random_algorithm()
 		#print(best_chromo, best_fitness)
 		learn_obj_list = self.print_solution_ga_integer(ranked_pop, index_partial_solution, original_learn_obj_list, map)
-		return learn_obj_list
 
-		
 		#Persista na ontologia os OAs temporários recomendados, se houver (LINHA 16 - ARP)
 		
 		#*******SALVAR A ONTOLOGIA**********
 		#self.save_main_ontology(self)
+
+		status = 'LOs recommended by GA'
+		return status, learn_obj_list
 	
 	def create_random_instance_scp(self, nr_lines, nr_columns):
 	
@@ -209,7 +198,6 @@ class Main_c():
 	def create_instance_scp(self, ideal_learn_obj, list_learn_obj, deleted_concepts, index_partial_solution):
 	
 		#Padroniza conceitos (minúsculo)
-		print()
 		list_concept = ideal_learn_obj.concept
 		ideal_learn_obj.concept = list_concept[:-1]
 		for i in range(len(ideal_learn_obj.concept)):
@@ -404,28 +392,26 @@ class Main_c():
 				
 	def create_learn_object(self, ideal_learn_obj):
 		
-		metadata_m = creation_learn_obj.Creation_metadata_m()
-		file_name = 'learn_obj_list.pickle'
-		self.learn_obj_list = metadata_m.load_learn_obj_list(file_name)
 
-		if self.learn_obj_list == -1 and self.wiki_pages:
+		wiki_list_learn_obj = []
+		if self.wiki_pages:
 			#Comente a linha abaixo para gerar OAs totalmente aleatorios
-			self.learn_obj_list = metadata_m.wiki_pages_2_OAs(self.wiki_pages) #Essa linha gera os OAs derivados das seções wiki
-			#Nas linhas abaixo são gerados OAs complementares - Serão gerados 790 OAs com 1 conceito coberto por cada um; mais 10 OAs com 2 conceitos cobertos por cada um; Os conceitos cobertos por cada OA são escolhidos aleatoriamente da lista "concepts"
+			metadata_m = creation_learn_obj.Creation_metadata_m()
+			wiki_list_learn_obj = metadata_m.wiki_pages_2_OAs(self.wiki_pages) #Essa linha gera os OAs derivados das seções wiki
 			
+			#Nas linhas abaixo são gerados OAs complementares - Serão gerados 790 OAs com 1 conceito coberto por cada um; mais 10 OAs com 2 conceitos cobertos por cada um; Os conceitos cobertos por cada OA são escolhidos aleatoriamente da lista "concepts"
 			#concepts = ['Reprodução', 'Mitose', 'Meiose', 'Célula', 'Tecido adiposo', 'Tecido conjuntivo', 'Epitélio', 'Protista', 'Animalia', 'Plantae']
 			#nr_concepts_list = [1,2]
 			#nr_los_list = [80,7]
 			#self.complement_los(concepts, nr_concepts_list, nr_los_list)
-			self.generate_parameter(ideal_learn_obj)
 			
-			metadata_m.save_learn_obj_list(self.learn_obj_list, file_name)
-			
-		if self.learn_obj_list != -1:
-			for i in range(len(self.learn_obj_list)):
-				print(i+1,' :', self.learn_obj_list[i].unique_identifier, self.learn_obj_list[i].concept, self.learn_obj_list[i].semantic_density)
+			#self.generate_parameter(ideal_learn_obj)
 		
-		return self.learn_obj_list
+		if wiki_list_learn_obj:
+			for i in range(len(wiki_list_learn_obj)):
+				print(i+1,' :', wiki_list_learn_obj[i].unique_identifier, wiki_list_learn_obj[i].concept, wiki_list_learn_obj[i].semantic_density)
+		
+		return wiki_list_learn_obj
 				
 	def create_temp_learn_obj(self, list_learn_obj):
 		
