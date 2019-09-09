@@ -48,7 +48,8 @@ class Search_m:
 
 		wikipedia.set_lang("pt")
 		search_wiki=wikipedia.search(search_line)
-		page = wikipedia.page(search_wiki[0])
+		wiki = wikipediaapi.Wikipedia('pt')
+		page = wiki.page(search_wiki[0])
 		if not page.summary and not page.sections:
 			page = ""
 		return page
