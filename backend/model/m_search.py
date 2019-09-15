@@ -42,17 +42,32 @@ import wikipediaapi
 class Search_m:
 
 	def __init__(self):
-		pass
+		self.pages = []
 
-	def search(self, search_line):
+	def search(self, search_line_list):
 
 		wikipedia.set_lang("pt")
-		search_wiki=wikipedia.search(search_line)
+		all_search_wiki = []
+		for i in range(len(search_line_list)):
+			search_line = search_line_list[i]
+			search_wiki = wikipedia.search(search_line)
+
+			num = len(search_line.split())
+			if len(search_wiki) < num:
+				num = len(search_wiki)
+			
+			for j in range(num):
+				if search_wiki[j] not in all_search_wiki:
+					all_search_wiki.append(search_wiki[j])
+
+		print('\n\n***********all_search_wiki: ', all_search_wiki)
 		wiki = wikipediaapi.Wikipedia('pt')
-		page = wiki.page(search_wiki[0])
-		if not page.summary and not page.sections:
-			page = ""
-		return page
+		for i in range(len(all_search_wiki)):
+			page = wiki.page(all_search_wiki[i])
+			if page.summary or page.sections:
+				self.pages.append(page)
+
+		return self.pages
 		
 # wiki = wikipediaapi.Wikipedia('en')
 # page_a = wiki.page('Number')

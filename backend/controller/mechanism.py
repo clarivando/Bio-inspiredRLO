@@ -69,7 +69,6 @@ class Main_c():
 				all_covered_concepts = False
 				break
 
-
 		#Se há conceitos que não podem ser cobertos por nenhum dos OAs sugeridos (LINHAS 9 A 13 - ARP)
 		wiki_learn_obj_list = []
 		if not all_covered_concepts:
@@ -96,31 +95,35 @@ class Main_c():
 		#Tirar copia de temp_learn_obj_list e armazenar em original_learn_obj_list
 		original_learn_obj_list = deepcopy(temp_learn_obj_list)
 
+		print("Conceitos cobertos por cada OA:\n")
 		for i in range(len(temp_learn_obj_list)):
-			print(i)
-			print(temp_learn_obj_list[i].concept)
+			print(i, temp_learn_obj_list[i].concept)
 		
-		#Execução o AG integer que resolve o PROA (LINHA 15 - ARP)
-		num_test = 1
-		pop_size = 100
+		#Execução do AG integer que resolve o PROA (LINHA 15 - ARP)
 		deleted_concepts = []
+		ranked_pop = []
 		index_partial_solution = [] #contém os OAs que cobrem algum conceito (do OA ideal) de maneira única
 		m, costs, map = self.create_instance_scp(ideal_learn_obj, temp_learn_obj_list, deleted_concepts, index_partial_solution)
 
 		if not m:
-			#Os OAs não cobrem nenhum dos conceitos a serem aprendidos!
-			status = 'LOs do not cover any concept'
-			return status, []
-
-		nr_lines = len(m)
-		nr_columns = len(m[0])
-		ga = ga_integer.Genetic(m, costs, nr_lines, nr_columns, pop_size)
-		rate = int(len(m)*0.10)   #10% do nr_lines (rate é o número de genes que sofre mutação)
-		if rate == 0:
-			rate = 1 #Um gene sofre mutação
-		ranked_pop = ga.run_genetic_algorithm(rate, num_test)
-		#best_chromo, best_fitness = ga.run_random_algorithm()
-		#print(best_chromo, best_fitness)
+			if not index_partial_solution:
+				#Os OAs não cobrem nenhum dos conceitos a serem aprendidos!
+				status = 'LOs do not cover any concept'
+				return status, []
+			else:
+				status = 'Trivial solution (GA is not used).'
+		else:
+			num_test = 1
+			pop_size = 100
+			nr_lines = len(m)
+			nr_columns = len(m[0])
+			ga = ga_integer.Genetic(m, costs, nr_lines, nr_columns, pop_size)
+			rate = int(len(m)*0.10)   #10% do nr_lines (rate é o número de genes que sofre mutação)
+			if rate == 0:
+				rate = 1 #Um gene sofre mutação
+			ranked_pop = ga.run_genetic_algorithm(rate, num_test)
+			status = 'LOs recommended by GA'
+		
 		learn_obj_list = self.print_solution_ga_integer(ranked_pop, index_partial_solution, original_learn_obj_list, map)
 
 		#Persista na ontologia os OAs temporários recomendados, se houver (LINHA 16 - ARP)
@@ -128,7 +131,6 @@ class Main_c():
 		#*******SALVAR A ONTOLOGIA**********
 		#self.save_main_ontology(self)
 
-		status = 'LOs recommended by GA'
 		return status, learn_obj_list
 	
 	def create_random_instance_scp(self, nr_lines, nr_columns):
@@ -166,22 +168,33 @@ class Main_c():
 	
 	def print_solution_ga_integer(self, ranked_pop, index_partial_solution, original_learn_obj_list, map):
 		
-		number_sol = 5
+		number_sol = len(ranked_pop)
+		if number_sol > 5:
+			number_sol = 5
+
 		for i in range(number_sol):
 			learn_obj_solution = []
 			for j in range(len(index_partial_solution)):
 				learn_obj_solution.append(original_learn_obj_list[index_partial_solution[j]])
 			index_solution = index_partial_solution[:]
-			for j in range(len(ranked_pop[i][0])):
-				index_lo = ranked_pop[i][0][j]
-				if map[index_lo] not in index_solution:
-					learn_obj_solution.append(original_learn_obj_list[map[index_lo]])
-					index_solution.append(map[index_lo])
-			print("\n********** SOLUÇÃO ", i+1, " **********")
-			print("index_solution: ", index_solution)
-			print("fitness: ", ranked_pop[i][1])
-			self.print_solution(learn_obj_solution)
-			return learn_obj_solution
+
+			if ranked_pop:
+				for j in range(len(ranked_pop[i][0])):
+					index_lo = ranked_pop[i][0][j]
+					if map[index_lo] not in index_solution:
+						learn_obj_solution.append(original_learn_obj_list[map[index_lo]])
+						index_solution.append(map[index_lo])
+				print("\n********** SOLUÇÃO ", i+1, " **********")
+				print("index_solution: ", index_solution)
+				print("fitness: ", ranked_pop[i][1])
+				self.print_solution(learn_obj_solution)
+			else:
+				print("\n********** SOLUÇÃO TRIVIAL (NÃO USA AG) **********")
+				print("index_solution: ", index_solution)
+				self.print_solution(learn_obj_solution)
+				break
+
+		return learn_obj_solution
 			
 	def print_solution(self, list_learn_obj):
 	
@@ -198,8 +211,6 @@ class Main_c():
 	def create_instance_scp(self, ideal_learn_obj, list_learn_obj, deleted_concepts, index_partial_solution):
 	
 		#Padroniza conceitos (minúsculo)
-		list_concept = ideal_learn_obj.concept
-		ideal_learn_obj.concept = list_concept[:-1]
 		for i in range(len(ideal_learn_obj.concept)):
 			ideal_learn_obj.concept[i] = ideal_learn_obj.concept[i].lower()
 
@@ -209,6 +220,7 @@ class Main_c():
 	
 		m = []
 		costs = []
+		
 		for i in range(len(ideal_learn_obj.concept)):
 			if ideal_learn_obj.concept[i] in deleted_concepts:
 				continue
@@ -228,7 +240,7 @@ class Main_c():
 				for k in range(len(concepts)):
 					if not(concepts[k] in deleted_concepts) and (concepts[k] in ideal_learn_obj.concept):
 						deleted_concepts.append(concepts[k])
-		
+
 		#Deleta conceitos
 		for i in range(len(deleted_concepts)):
 			ideal_learn_obj.concept.remove(deleted_concepts[i])
@@ -310,12 +322,12 @@ class Main_c():
 		
 		#self.search_c.line_search_lineEdit.clear()
 		search_m = m_search.Search_m()
-		search_word=""
+		search_word_list = []
 		for i in range(len(concepts_list)):
 			search_word = concepts_list[i] + " " + title
-			page = search_m.search(search_word)
-			if page:
-				self.wiki_pages.append(page)
+			search_word_list.append(search_word)
+
+		self.wiki_pages = search_m.search(search_word_list)
 			
 	#O método create_learn_object (mais abaixo) chama este método generate_parameter
 	#O método create_learn_object é chamado na main.py
